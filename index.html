@@ -17,7 +17,7 @@
         <button onclick="copyK()">COPY KEY</button>
     </div>
     <script>
-        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Removed confusing chars like O and 0
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         let res = "HV-";
         for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
         document.getElementById('k').innerText = res;

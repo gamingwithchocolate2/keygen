@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>S-Suite | Key System </title>
+    <title>S-Suite | Key System</title>
     <style>
         body { background: #050505; color: #00ff00; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         .box { border: 1px solid #00ff00; padding: 30px; background: #000; box-shadow: 0 0 20px rgba(0,255,0,0.2); text-align: center; }
-        .key { font-size: 32px; letter-spacing: 5px; margin: 20px 0; color: #fff; text-shadow: 0 0 10px #00ff00; }
-        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; font-family: monospace; }
+        .key { font-size: 28px; letter-spacing: 3px; margin: 20px 0; color: #fff; }
+        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -14,27 +14,22 @@
         <h2>ACCESS GRANTED</h2>
         <div class="key" id="k">GENERATING...</div>
         <button onclick="copyK()">COPY KEY</button>
+        <p style="font-size: 12px; color: #666;">Key expires in 60 seconds.</p>
     </div>
     <script>
-        function generateSecureKey() {
-            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-            const nums = "23456789";
-            let part1 = "";
-            for(let i=0; i<3; i++) part1 += chars.charAt(Math.floor(Math.random() * chars.length));
-            
-            let sum = 0;
-            for(let i=0; i<part1.length; i++) sum += part1.charCodeAt(i);
-            let checkDigit = nums.charAt(sum % nums.length); 
-
-            return `HV-${part1}${checkDigit}`;
+        function getTimedKey() {
+            const timeRef = Math.floor(Date.now() / 60000); 
+            const secret = 539;
+            const hash = ((timeRef * secret) % 9000) + 1000; 
+            return `HV-${hash}`;
         }
 
-        const finalKey = generateSecureKey();
-        document.getElementById('k').innerText = finalKey;
+        const activeKey = getTimedKey();
+        document.getElementById('k').innerText = activeKey;
 
         function copyK() {
-            navigator.clipboard.writeText(finalKey);
-            alert("Key copied! Return to the site.");
+            navigator.clipboard.writeText(activeKey);
+            alert("Key copied! Use it quickly, it expires in 1 minute.");
         }
     </script>
 </body>

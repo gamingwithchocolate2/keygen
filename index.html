@@ -1,35 +1,178 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>S-Suite | Key System</title>
+    <title>S-Suite V2 | License </title>
     <style>
-        body { background: #050505; color: #00ff00; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .box { border: 1px solid #00ff00; padding: 30px; background: #000; box-shadow: 0 0 20px rgba(0,255,0,0.2); text-align: center; }
-        .key { font-size: 28px; letter-spacing: 3px; margin: 20px 0; color: #fff; }
-        button { background: #00ff00; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e6edf3; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .container {
+            background: rgba(15, 15, 25, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid rgba(68, 76, 86, 0.3); border-radius: 24px;
+            padding: 40px; max-width: 500px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        h1 { 
+            background: linear-gradient(135deg, #539bf5, #7dd3fc, #34d058); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 8px;
+        }
+        .subtitle { color: #8b949e; text-align: center; margin-bottom: 32px; font-size: 16px; }
+        
+        .plan-selector {
+            display: flex; gap: 12px; margin-bottom: 32px; justify-content: center; flex-wrap: wrap;
+        }
+        .plan-btn {
+            padding: 12px 24px; border: 2px solid rgba(83, 155, 245, 0.3); border-radius: 12px;
+            background: rgba(83, 155, 245, 0.1); color: #adbac7; cursor: pointer; transition: all 0.3s;
+            font-weight: 600; font-size: 14px; backdrop-filter: blur(10px);
+        }
+        .plan-btn.active, .plan-btn:hover {
+            background: linear-gradient(135deg, #539bf5, #3b82f6); color: white;
+            border-color: #539bf5; box-shadow: 0 10px 25px rgba(83, 155, 245, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .key-display {
+            background: linear-gradient(135deg, #1a1f2e, #16213e); border: 1px solid rgba(83, 155, 245, 0.5);
+            border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 24px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .key-code {
+            font-family: 'SF Mono', 'Courier New', monospace; font-size: 28px; font-weight: 800;
+            letter-spacing: 4px; color: #539bf5; margin-bottom: 12px; text-shadow: 0 0 20px rgba(83, 155, 245, 0.5);
+        }
+        .plan-info {
+            background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 12px;
+            padding: 16px; margin-bottom: 24px;
+        }
+        .plan-name { font-size: 20px; font-weight: 800; color: #34d058; margin-bottom: 8px; }
+        .plan-duration { color: #8b949e; font-size: 14px; }
+        
+        .action-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 14px 28px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700;
+            font-size: 14px; transition: all 0.3s; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-copy { background: linear-gradient(135deg, #539bf5, #3b82f6); color: white; flex: 1; min-width: 140px; }
+        .btn-copy:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(83, 155, 245, 0.4); }
+        .btn-regen { background: rgba(139, 165, 199, 0.2); color: #adbac7; border: 1px solid rgba(139, 165, 199, 0.3); flex: 1; min-width: 140px; }
+        .btn-regen:hover { background: rgba(139, 165, 199, 0.3); color: #e6edf3; }
+        
+        .warning {
+            background: rgba(248, 81, 73, 0.1); border: 1px solid rgba(248, 81, 73, 0.3); border-radius: 12px;
+            padding: 16px; margin-top: 24px; font-size: 13px; color: #f85149;
+        }
+        .features { display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #8b949e; margin-top: 16px; }
+        .feature { display: flex; align-items: center; gap: 8px; }
+        .feature::before { content: '✓'; color: #34d058; font-weight: bold; }
+        
+        @media (max-width: 480px) {
+            .container { padding: 24px; margin: 10px; }
+            .plan-selector { flex-direction: column; align-items: center; }
+            .action-buttons { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>ACCESS GRANTED</h2>
-        <div class="key" id="k">GENERATING...</div>
-        <button onclick="copyK()">COPY KEY</button>
-        <p style="font-size: 12px; color: #666;">Key expires in 60 seconds. Memorize the code.</p>
+    <div class="container">
+        <h1>S-Suite V2</h1>
+        <p class="subtitle">Premium License Key Generator</p>
+        
+        <div class="plan-selector">
+            <button class="plan-btn active" data-plan="standard">Standard</button>
+            <button class="plan-btn" data-plan="premium">Premium</button>
+            <button class="plan-btn" data-plan="ultimate">Ultimate</button>
+        </div>
+        
+        <div class="key-display">
+            <div class="key-code" id="keyCode">GENERATING...</div>
+        </div>
+        
+        <div class="plan-info" id="planInfo">
+            <div class="plan-name">Standard Plan</div>
+            <div class="plan-duration">Session expires in 2 minutes</div>
+            <div class="features">
+                <div class="feature">Basic Crash Predictor</div>
+                <div class="feature">Mines Grid Scanner</div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn btn-copy" onclick="copyKey()">📋 Copy Key</button>
+            <button class="btn btn-regen" onclick="generateNewKey()">🔄 New Key</button>
+        </div>
+        
+        <div class="warning">
+            <strong>⚠️ Security Notice:</strong> Keys are time-sensitive and plan-specific. 
+            Higher plans = longer session duration. Use immediately after copying!
+        </div>
     </div>
+
     <script>
-        function getTimedKey() {
-            const timeRef = Math.floor(Date.now() / 60000); 
-            const secret = 539;
-            const hash = ((timeRef * secret) % 9000) + 1000; 
-            return `HV-${hash}`;
+        const PLANS = {
+            standard: { duration: 2, prefix: 'HV-', color: '#f59e0b', features: ['Crash Predictor', 'Mines Scanner'] },
+            premium: { duration: 10, prefix: 'PV-', color: '#10b981', features: ['Crash Predictor', 'Mines Scanner', 'Auto Exploits'] },
+            ultimate: { duration: 60, prefix: 'UV-', color: '#3b82f6', features: ['Crash Predictor', 'Mines Scanner', 'Auto Exploits', 'Coin Override', 'Priority Sync'] }
+        };
+
+        let currentKey = '';
+        let currentPlan = 'standard';
+
+        function generateKey(plan) {
+            const timeRef = Math.floor(Date.now() / 60000);
+            const secret = 539 + (plan === 'premium' ? 100 : plan === 'ultimate' ? 200 : 0);
+            const hash = ((timeRef * secret) % 9000) + 1000;
+            const planCode = { standard: 'S', premium: 'P', ultimate: 'U' }[plan];
+            return `${PLANS[plan].prefix}${planCode}${hash.toString().padStart(4, '0')}`;
         }
 
-        const activeKey = getTimedKey();
-        document.getElementById('k').innerText = activeKey;
+        function updatePlanInfo(plan) {
+            const info = document.getElementById('planInfo');
+            const planData = PLANS[plan];
+            info.innerHTML = `
+                <div class="plan-name" style="color: ${planData.color}">${plan.charAt(0).toUpperCase() + plan.slice(1)} Plan</div>
+                <div class="plan-duration">Session expires in ${planData.duration} minutes</div>
+                <div class="features">
+                    ${planData.features.map(f => `<div class="feature">${f}</div>`).join('')}
+                </div>
+            `;
+        }
 
-        function copyK() {
-            navigator.clipboard.writeText(activeKey);
-            alert("Key copied! Use it quickly, it expires in 1 minute.");
+        function generateNewKey() {
+            currentKey = generateKey(currentPlan);
+            document.getElementById('keyCode').textContent = currentKey;
+            document.getElementById('keyCode').style.color = PLANS[currentPlan].color;
+        }
+
+        // Plan selection
+        document.querySelectorAll('.plan-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPlan = btn.dataset.plan;
+                updatePlanInfo(currentPlan);
+                generateNewKey();
+            };
+        });
+
+        // Initial setup
+        generateNewKey();
+        updatePlanInfo('standard');
+
+        function copyKey() {
+            navigator.clipboard.writeText(currentKey).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                const original = btn.innerHTML;
+                btn.innerHTML = '✅ Copied!';
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = 'linear-gradient(135deg, #539bf5, #3b82f6)';
+                }, 2000);
+            });
         }
     </script>
 </body>
